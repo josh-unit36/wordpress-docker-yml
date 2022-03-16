@@ -16,7 +16,15 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
     networks:
       - wordpress
-
+      
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+    networks:
+      - wordpress
+      
   phpmyadmin:
     depends_on:
       - db
@@ -38,7 +46,9 @@ services:
     ports:
       - '8001:80'
     restart: always
-    volumes: [ './:/var/www/html' ]
+    volumes: 
+      - ./:/var/www/html
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wordpress
